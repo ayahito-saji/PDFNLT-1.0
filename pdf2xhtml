@@ -1,0 +1,31 @@
+#!/bin/bash
+
+WITH_IMAGE=false
+
+while (( $# > 0 ))
+do
+  case $1 in
+    -i | --with-image)
+      WITH_IMAGE=true
+      ;;
+  esac
+  shift
+done
+
+if [ -e /workspace/*.pdf ]; then
+  if "${WITH_IMAGE}"; then
+    (rm -rf /PDFNLT-1.0/pdfanalyzer/pdf &&
+    mkdir /PDFNLT-1.0/pdfanalyzer/pdf &&
+    cp /workspace/*.pdf /PDFNLT-1.0/pdfanalyzer/pdf/ &&
+    cd /PDFNLT-1.0/pdfanalyzer &&
+    php pdfanalyze.php --command generate_xhtml --all --with-image &&
+    cp -R ./xhtml /workspace && rm -rf /PDFNLT-1.0/pdfanalyzer/pdf)
+  else
+    (rm -rf /PDFNLT-1.0/pdfanalyzer/pdf &&
+    mkdir /PDFNLT-1.0/pdfanalyzer/pdf &&
+    cp /workspace/*.pdf /PDFNLT-1.0/pdfanalyzer/pdf/ &&
+    cd /PDFNLT-1.0/pdfanalyzer &&
+    php pdfanalyze.php --command generate_xhtml --all &&
+    cp -R ./xhtml /workspace && rm -rf /PDFNLT-1.0/pdfanalyzer/pdf)
+  fi
+fi
