@@ -12,7 +12,11 @@ do
   shift
 done
 
-if [ -e /workspace/*.pdf ]; then
+ls /workspace/*.pdf >/dev/null 2>&1
+
+if [ $? -ne 0 ]; then
+  echo "ERROR: File doesn't exist."
+else
   if "${WITH_IMAGE}"; then
     (rm -rf /PDFNLT-1.0/pdfanalyzer/pdf &&
     mkdir /PDFNLT-1.0/pdfanalyzer/pdf &&
